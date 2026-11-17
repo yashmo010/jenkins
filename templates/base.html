@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CareDesk{% endblock %} · CareDesk</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}">
+        <span class="brand-mark">+</span>
+        <span>CareDesk<small>Hospital admin</small></span>
+      </a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav>
+        <a class="{% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}">Overview</a>
+        <a class="{% if request.endpoint == 'patients' %}active{% endif %}" href="{{ url_for('patients') }}">Patients</a>
+        <a class="{% if request.endpoint == 'appointments' %}active{% endif %}" href="{{ url_for('appointments') }}">Appointments</a>
+      </nav>
+      <div class="sidebar-note">A simple place to keep the day organized.</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <span>Hospital management</span>
+        <span class="today">{{ now_label }}</span>
+      </header>
+      <section class="page">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="notice {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>

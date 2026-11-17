@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">SCHEDULE</p>
+    <h1>Appointments</h1>
+    <p class="muted">Schedule and review patient visits.</p>
+  </div>
+</div>
+
+<section class="panel form-panel">
+  <div class="panel-heading"><div><h2>Schedule a visit</h2><p class="muted">Choose a patient and a member of staff.</p></div></div>
+  {% if patients %}
+  <form method="post" action="{{ url_for('add_appointment') }}" class="form-grid">
+    <label>Patient
+      <select name="patient_id" required><option value="">Select a patient</option>{% for patient in patients %}<option value="{{ patient.id }}">{{ patient.name }}</option>{% endfor %}</select>
+    </label>
+    <label>Doctor
+      <select name="doctor_id" required><option value="">Select a doctor</option>{% for doctor in doctors %}<option value="{{ doctor.id }}">{{ doctor.name }} · {{ doctor.department }}</option>{% endfor %}</select>
+    </label>
+    <label>Date and time<input name="appointment_at" type="datetime-local" required></label>
+    <label>Visit note <span class="optional">(optional)</span><input name="reason" maxlength="200" placeholder="e.g. Follow-up visit"></label>
+    <div class="form-actions"><button class="button" type="submit">Schedule appointment</button></div>
+  </form>
+  {% else %}
+  <div class="empty-state">Add a patient before scheduling an appointment. <a class="text-link" href="{{ url_for('patients') }}">Go to patients →</a></div>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <div class="panel-heading"><div><h2>All appointments</h2><p class="muted">{{ appointments|length }} scheduled visit{% if appointments|length != 1 %}s{% endif %}</p></div></div>
+  {% if appointments %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Patient</th><th>Doctor</th><th>Date &amp; time</th><th>Note</th><th>Status</th></tr></thead>
+      <tbody>{% for appointment in appointments %}
+        <tr>
+          <td class="person">{{ appointment.patient }}</td>
+          <td>{{ appointment.doctor }}</td>
+          <td>{{ appointment.appointment_at|datetime }}</td>
+          <td>{{ appointment.reason or "—" }}</td>
+          <td><span class="pill">{{ appointment.status }}</span></td>
+        </tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty-state">No appointments yet. Use the form above to add one.</div>{% endif %}
+</section>
+{% endblock %}

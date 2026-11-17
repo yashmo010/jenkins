@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Patients{% endblock %}
+{% block content %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow">RECORDS</p>
+    <h1>Patients</h1>
+    <p class="muted">Keep basic patient details in one place.</p>
+  </div>
+</div>
+
+<section class="panel form-panel">
+  <div class="panel-heading"><div><h2>Add a patient</h2><p class="muted">Only collect the details you need for this demo.</p></div></div>
+  <form method="post" action="{{ url_for('add_patient') }}" class="form-grid">
+    <label>Full name<input name="name" maxlength="100" required placeholder="e.g. Alex Morgan"></label>
+    <label>Age<input name="age" type="number" min="0" max="120" required placeholder="34"></label>
+    <label>Phone <span class="optional">(optional)</span><input name="phone" maxlength="30" type="tel" placeholder="(555) 010-1234"></label>
+    <label>Department
+      <select name="department_id">
+        <option value="">Not assigned</option>
+        {% for department in departments %}<option value="{{ department.id }}">{{ department.name }}</option>{% endfor %}
+      </select>
+    </label>
+    <div class="form-actions"><button class="button" type="submit">Add patient</button></div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-heading">
+    <div><h2>Patient directory</h2><p class="muted">{{ patients|length }} record{% if patients|length != 1 %}s{% endif %}</p></div>
+    <form method="get" class="search-form"><input name="q" value="{{ search }}" placeholder="Search patients"><button class="button button-light" type="submit">Search</button></form>
+  </div>
+  {% if patients %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Name</th><th>Age</th><th>Phone</th><th>Department</th></tr></thead>
+      <tbody>{% for patient in patients %}
+        <tr><td class="person">{{ patient.name }}</td><td>{{ patient.age }}</td><td>{{ patient.phone or "—" }}</td><td>{{ patient.department or "Not assigned" }}</td></tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<div class="empty-state">No patients found. Add the first record above.</div>{% endif %}
+</section>
+{% endblock %}
