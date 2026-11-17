@@ -5,6 +5,10 @@ pipeline {
         timestamps()
     }
 
+    environment {
+        WINDOWS_PYTHON = 'C:\\Users\\HP\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe'
+    }
+
     stages {
         stage('Set up Python') {
             steps {
@@ -13,8 +17,8 @@ pipeline {
                         sh 'python3 --version'
                         sh 'python3 -m pip install -r requirements.txt'
                     } else {
-                        bat 'py -3 --version'
-                        bat 'py -3 -m pip install -r requirements.txt'
+                        bat '"%WINDOWS_PYTHON%" --version'
+                        bat '"%WINDOWS_PYTHON%" -m pip install -r requirements.txt'
                     }
                 }
             }
@@ -25,7 +29,7 @@ pipeline {
                     if (isUnix()) {
                         sh 'python3 -m unittest discover -s tests -v'
                     } else {
-                        bat 'py -3 -m unittest discover -s tests -v'
+                        bat '"%WINDOWS_PYTHON%" -m unittest discover -s tests -v'
                     }
                 }
             }
