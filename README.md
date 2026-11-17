@@ -25,7 +25,7 @@ python -m unittest discover -s tests -v
 
 ## Jenkins
 
-The `Jenkinsfile` installs the Python dependencies and runs the test suite. Configure a Jenkins agent with Python 3 and `pip`, create a Pipeline job pointing at this repository, and Jenkins will pick up the pipeline automatically. The pipeline uses `sh`, so the agent should be Linux-based.
+The `Jenkinsfile` installs the Python dependencies and runs the test suite on either a Linux or Windows Jenkins agent. Ensure Python 3 and `pip` are available to the Jenkins agent account (`python3` on Linux; the `py -3` launcher on Windows), then create a Pipeline job pointing at this repository.
 
 ## Scope and privacy
 
