@@ -28,6 +28,11 @@ class HospitalAppTests(unittest.TestCase):
             follow_redirects=True,
         )
 
+    def test_health_endpoint(self):
+        response = self.client.get("/health")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, {"status": "ok"})
+
     def test_dashboard_and_seeded_staff_load(self):
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)

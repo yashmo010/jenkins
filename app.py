@@ -107,6 +107,10 @@ def create_app(test_config=None):
     with app.app_context():
         init_db()
 
+    @app.get("/health")
+    def health():
+        return {"status": "ok"}
+
     @app.get("/")
     def dashboard():
         db = get_db()
